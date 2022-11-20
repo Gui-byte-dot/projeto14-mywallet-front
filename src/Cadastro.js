@@ -1,22 +1,45 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
 
 export default function Cadastro(){
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
+
+    function cadastrar(event){
+        event.preventDefault();
+        const requisicao = axios.post("http://localhost/5000/sign-up",{
+            name,
+            email,
+            password
+        })
+        requisicao.then(response => {
+            navigate('/');
+            console.log(response.data)
+        })
+    }
     return(
         <>
             <Title>MyWallet</Title>
-            <Signup>
-                <input type="text" placeholder="Nome"></input>
-                <input type="text" placeholder="E-mail"></input>
-                <input type="password" placeholder="Senha"></input>
+            <Signup onSubmit={cadastrar}>
+                <input type="text" placeholder="Nome" value={name} onChange={e => setName(e.target.value)}></input>
+                <input type="text" placeholder="E-mail" value={email} onChange={e => setEmail(e.target.value)}></input>
+                <input type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.password)}></input>
                 <input type="password" placeholder="Confirme a senha"></input>
-
-            <button>Cadastrar</button>
-            <Link to="/">
-                <Logar>Já tem uma conta? Entre agora!</Logar>
-            </Link>
-        </Signup></>    )
+                <button type="submit">Cadastrar</button>
+                <Link to="/">
+                    <Logar>Já tem uma conta? Entre agora!</Logar>
+                </Link>
+        </Signup></>    
+        )
 }
+
+// http://localhost:3002/products
+
 const Title = styled.p`
     color:#FFFFFF;
     font-size: 32px;
@@ -24,7 +47,7 @@ const Title = styled.p`
     justify-content:center;
     margin-top:95px;
 `
-const Signup = styled.div`
+const Signup = styled.form`
     display:flex;
     flex-direction:column;
     justify-content:center;

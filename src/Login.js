@@ -1,15 +1,34 @@
 import styled from "styled-components";
-import { Link} from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
+import { useState } from "react";
 
 
 export default function Login(){
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const {setToken} = useContext(LoginContext)
+    const navigate = useNavigate();
+
+    function login(event){
+        event.preventDefault();
+        const requisicao = axios.post("http://localhost/5000/sign-in",{
+            email,
+            password
+        })
+        requisicao.then(response => {
+            setToken(res.data.token);
+            navigate('/meus-dados');
+            console.log(response.data)
+        })
+    }
+
     return(
         <>
             <Title>MyWallet</Title>
-            <Signin>
-                <input type="text" placeholder="email"></input>
-                <input type="password" placeholder="senha"></input>
-                <button>Entrar</button>
+            <Signin onSubmit={login}>
+                <input type="text" placeholder="email" value={email} onChange={e => setEmail(e.target.value)}></input>
+                <input type="password" placeholder="senha" value={password} onChange={e => setPassword(e.target.value)}></input>
+                <button type="submit">Entrar</button>
             </Signin>
             <Link to="/cadastro">
                 <Cadastrar>Já tem uma conta? Entre agora!</Cadastrar>
@@ -26,7 +45,7 @@ const Title = styled.p`
     justify-content:center;
     margin-top:159px;
 `
-const Signin = styled.div`
+const Signin = styled.form`
     display:flex;
     flex-direction:column;
     justify-content:center;

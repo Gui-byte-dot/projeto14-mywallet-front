@@ -1,14 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { Link, useNavigate} from "react-router-dom";
+import { LoginContext } from "./auth";
+import axios from "axios";
+
+
 
 export default function Entradas(){
+    const [value, setValue] = useState("");
+    const [description, setDescription] = useState("");
+    const {setToken} = useContext(LoginContext);
+    const navigate = useNavigate();
+
+    function entrada(event){
+        event.preventDefault();
+
+        const config = {
+            headers: {Authorization: `Bearer ${token}`}
+        }
+
+        const requisicao = axios.post("http://localhost/5000/reports", {
+            value,
+            description,
+            type:"entrada"
+        },config);
+        requisicao.then(response => {
+            setToken(response.data.token);
+            navigate('/meus-dados')
+            
+        })
+    }
+
     return(
         <>
             <Tituloentrada>Nova entrada</Tituloentrada>
-            <Novaentrada>
-                <input type="text" placeholder="Valor"></input>
-                <input type="text" placeholder="Descrição"></input>
-                <button>Salvar entrada</button>
+            <Novaentrada onSubmit={entrada}>
+                <input type="text" placeholder="Valor" value={value} onChange={e => setValue(e.target.value)}></input>
+                <input type="text" placeholder="Descrição" value={description} onChange={e => setDescription(e.target.value)}></input>
+                <button type="submit">Salvar entrada</button>
             </Novaentrada>
         </>
 
@@ -22,7 +51,7 @@ const Tituloentrada = styled.p`
     font-weight: 700;
 
 `
-const Novaentrada = styled.div`
+const Novaentrada = styled.form`
     display:flex;
     flex-direction:column;
     justify-content:center;

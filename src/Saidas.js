@@ -1,14 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { Link, useNavigate} from "react-router-dom";
+import { LoginContext } from "./auth";
+import axios from "axios";
 
 export default function Saidas() {
+
+    const [value, setValue] = useState("");
+    const [description, setDescription] = useState("");
+    const {setToken} = useContext(LoginContext);
+    const navigate = useNavigate();
+
+
+    function saida(event){
+        event.preventDefault();
+
+        const config = {
+            headers: {Authorization: `Bearer ${token}`}
+        }
+
+        const requisicao = axios.post("http://localhost/5000/reports", {
+            value,
+            description,
+            type:"saida"
+        },config);
+        requisicao.then(response => {
+            setToken(response.data.token);
+            navigate('/meus-dados');
+        })
+    }
+
     return (
         <>
             <Titulosaida>Nova saida</Titulosaida>
-            <Novasaida>
-                <input type="text" placeholder="Valor"></input>
-                <input type="text" placeholder="Descrição"></input>
-                <button>Salvar saida</button>
+            <Novasaida onSubmit={saida}>
+                <input type="text" placeholder="Valor" value={value} onChange={e => setValue(e.target.value)}></input>
+                <input type="text" placeholder="Descrição" value={description} onChange={e => setDescription(e.target.value)}></input>
+                <button type="submit">Salvar saida</button>
             </Novasaida>
         </>
     )
@@ -22,7 +50,7 @@ const Titulosaida = styled.p`
     font-weight: 700;
 
 `
-const Novasaida = styled.div`
+const Novasaida = styled.form`
     display:flex;
     flex-direction:column;
     justify-content:center;

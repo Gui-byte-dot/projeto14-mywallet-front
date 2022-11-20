@@ -1,26 +1,47 @@
-import React from "react";
+import React,{useContext, useState, useEffect} from "react";
 import styled from "styled-components";
+import { LoginContext } from "./auth";
+import axios from "axios";
 
 export default function Meusdados(){
+    const {token} = useContext(LoginContext);
+    const [dados, setDados] = useState([]);
+
+
+    useEffect(() => {
+        const config = {
+            headers: {Authorization: `Bearer ${token}`}
+        }
+        const promise = axios.get("http://localhost/5000/meus-dados",config);
+        promise.then((res) => {
+            console.log(res.data);
+            setDados(res.data);
+        })
+    })
+
     return(
         <>
-            <Name>
-                <p>Olá, fulano</p>
-                <ion-icon name="exit-outline"></ion-icon>
-            </Name>
-            <Info>
-                <p>Não há registros de entrada ou saída</p>
-            </Info>
-            <Entradasesaidas>
-                <Entradas>
-                    <ion-icon name="add-circle-outline" ></ion-icon>
-                    <div>Nova Entrada</div>
-                </Entradas>
-                <Saidas>
-                    <ion-icon name="add-circle-outline" ></ion-icon>
-                    <div>Nova Saída</div>
-                </Saidas>
-            </Entradasesaidas>
+            {dados.map((lista) => 
+            <>
+                <Name>
+                    <p>Olá, fulano</p>
+                    <ion-icon name="exit-outline"></ion-icon>
+                </Name>
+                <Info>
+                    <p>{lista.value}</p>
+                </Info>
+                <Entradasesaidas>
+                    <Entradas>
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        <div>Nova Entrada</div>
+                    </Entradas>
+                    <Saidas>
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        <div>Nova Saída</div>
+                    </Saidas>
+                </Entradasesaidas>
+            </>
+            )}
         </>
     )
 }
