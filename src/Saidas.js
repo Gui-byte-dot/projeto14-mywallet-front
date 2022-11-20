@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { Link, useNavigate} from "react-router-dom";
 import { LoginContext } from "./auth";
@@ -9,6 +9,7 @@ export default function Saidas() {
     const [value, setValue] = useState("");
     const [description, setDescription] = useState("");
     const {setToken} = useContext(LoginContext);
+    const {token} = useContext(LoginContext)
     const navigate = useNavigate();
 
 

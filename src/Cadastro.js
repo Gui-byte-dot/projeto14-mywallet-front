@@ -12,14 +12,18 @@ export default function Cadastro(){
 
     function cadastrar(event){
         event.preventDefault();
-        const requisicao = axios.post("http://localhost/5000/sign-up",{
+        const requisicao = axios.post("https://localhost/5000/sign-up",{
             name,
             email,
             password
         })
+        
         requisicao.then(response => {
             navigate('/');
             console.log(response.data)
+        })
+        requisicao.catch(err => {
+            console.log(err);
         })
     }
     return(

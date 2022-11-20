@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { Link, useNavigate} from "react-router-dom";
-import { useState } from "react";
+import React, { useState, useContext } from "react";
+import axios from "axios";
+import { LoginContext } from "./auth";
+
 
 
 export default function Login(){
@@ -16,7 +19,7 @@ export default function Login(){
             password
         })
         requisicao.then(response => {
-            setToken(res.data.token);
+            setToken(response.data.token);
             navigate('/meus-dados');
             console.log(response.data)
         })
