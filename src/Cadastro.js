@@ -12,7 +12,7 @@ export default function Cadastro(){
 
     function cadastrar(event){
         event.preventDefault();
-        const requisicao = axios.post("https://localhost/5000/sign-up",{
+        const requisicao = axios.post("http://localhost:5000/sign-up",{
             name,
             email,
             password
@@ -32,7 +32,7 @@ export default function Cadastro(){
             <Signup onSubmit={cadastrar}>
                 <input type="text" placeholder="Nome" value={name} onChange={e => setName(e.target.value)}></input>
                 <input type="text" placeholder="E-mail" value={email} onChange={e => setEmail(e.target.value)}></input>
-                <input type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.password)}></input>
+                <input type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.value)}></input>
                 <input type="password" placeholder="Confirme a senha"></input>
                 <button type="submit">Cadastrar</button>
                 <Link to="/">

@@ -21,7 +21,7 @@ export default function Entradas(){
             headers: {Authorization: `Bearer ${token}`}
         }
 
-        const requisicao = axios.post("http://localhost/5000/reports", {
+        const requisicao = axios.post("http://localhost:5000/reports", {
             value,
             description,
             type:"entrada"
@@ -29,7 +29,10 @@ export default function Entradas(){
         requisicao.then(response => {
             setToken(response.data.token);
             navigate('/meus-dados')
-            
+            console.log(response.data);
+        })
+        requisicao.catch(err => {
+            console.log(err);
         })
     }
 

@@ -1,49 +1,60 @@
-import React,{useContext, useState, useEffect} from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { LoginContext } from "./auth";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
-export default function Meusdados(){
-    const {token} = useContext(LoginContext);
+export default function Meusdados() {
+    const { token } = useContext(LoginContext);
     const [dados, setDados] = useState([]);
 
 
     useEffect(() => {
         const config = {
-            headers: {Authorization: `Bearer ${token}`}
+            headers: { Authorization: `Bearer ${token}` }
         }
-        const promise = axios.get("http://localhost/5000/meus-dados",config);
+        const promise = axios.get("http://localhost:5000/meus-dados", config);
         promise.then((res) => {
-            console.log(res.data);
             setDados(res.data);
+            console.log(res.data);
         })
-    })
+    }, [token])
 
-    return(
-        <>
-            {dados.map((lista) => 
+  
+        
+    return (
             <>
-                <Name>
-                    <p>Olá, fulano</p>
-                    <ion-icon name="exit-outline"></ion-icon>
-                </Name>
-                <Info>
-                    <p>{lista.value}</p>
-                </Info>
-                <Entradasesaidas>
-                    <Entradas>
-                        <ion-icon name="add-circle-outline"></ion-icon>
-                        <div>Nova Entrada</div>
-                    </Entradas>
-                    <Saidas>
-                        <ion-icon name="add-circle-outline"></ion-icon>
-                        <div>Nova Saída</div>
-                    </Saidas>
-                </Entradasesaidas>
+                <div>
+                    <>
+                        <Name>
+                            <p>Olá, fulano</p>
+                            <ion-icon name="exit-outline"></ion-icon>
+                        </Name>
+                        <Info>
+                            {dados.map(item => <p>{item.value}</p>)}
+                        </Info>
+                        <Entradasesaidas>
+                            <Link to='/entradas'>
+                                <Entradas>
+                                    <ion-icon name="add-circle-outline"></ion-icon>
+                                    <div>Nova Entrada</div>
+                                </Entradas>
+                            </Link>
+                            <Link to='/saidas'>
+                                <Saidas>
+                                    <ion-icon name="add-circle-outline"></ion-icon>
+                                    <div>Nova Saída</div>
+                                </Saidas>
+                            </Link>
+                        </Entradasesaidas>
+                    </>
+                </div>
             </>
-            )}
-        </>
-    )
+        )
+    
+
+
+    
 }
 const Info = styled.div`
     display:flex;
